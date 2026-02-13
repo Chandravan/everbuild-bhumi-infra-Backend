@@ -1,10 +1,15 @@
 import xlsx from "xlsx";
 import path from "path";
+import { fileURLToPath } from "url";
 import Route from "../models/Route.js";
 import mongoose from "mongoose";
 
-const filePath = path.resolve(process.cwd(), "data/rate.xlsx")
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// '../..' ka matlab: config se bahar, phir src se bahar, phir data folder mein
+const filePath = path.resolve(__dirname, "../../data/rate.xlsx");
 
 
 export const loadDestinationRatesToDB = async () => {
