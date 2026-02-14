@@ -14,8 +14,8 @@ export const getTotalByPartner = async (req, res) => {
 
     // Format results to match frontend state
     const totals = {
-      partner1Total: result.find(r => r._id === "Rohit")?.totalAmount || 0,
-      partner2Total: result.find(r => r._id === "Partner 2")?.totalAmount || 0
+      RohitTotal: result.find(r => r._id === "Rohit")?.totalAmount || 0,
+      RajGautamTotal: result.find(r => r._id === "Raj Gautam")?.totalAmount || 0
     };
 
     res.status(200).json(totals);

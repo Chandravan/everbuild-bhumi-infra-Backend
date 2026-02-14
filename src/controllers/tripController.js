@@ -1,4 +1,5 @@
 import Trip from "../models/Trip.js";
+import Route from "../models/Route.js";
 import { calculateTripAmount } from "../config/calculateTripAmount.js";
 
 // Get All Trips
@@ -48,13 +49,44 @@ export const createTrip = async (req, res) => {
                  
     } = req.body;
 
-    // Total amount (customer)
-    const totalAmount = await calculateTripAmount(tonMaterial, to);
-    const rate = totalAmount/ (tonMaterial *1000);
+    let totalAmount = 0;
+    let totalTonMaterial = 0;
+
+    // 1. Loop through parties to calculate individual amounts and fetch rates
+    const calculatedParties = await Promise.all(
+      parties.map(async (party) => {
+        const toCity = party.destination.trim().toUpperCase();
+        const route = await Route.findOne({ toCity });
+
+        if (!route) {
+          throw new Error(`Rate not found for destination: ${toCity}`);
+        }
+
+        const partyMaterial = Number(party.material);
+        // Calculation: Material (Tons) * Rate from Route Table
+        const partyAmount = Math.round(partyMaterial * route.rate);
+
+        totalAmount += partyAmount;
+        totalTonMaterial += partyMaterial;
+
+        return {
+          ...party,
+          material: partyMaterial,
+          destination: toCity,
+          rate: route.rate,   // Individual rate for this drop
+          amount: partyAmount // Individual amount for this drop
+        };
+      })
+    );
     // Profit calculation
-    const profit = totalAmount - truckPayment - dailyExpense;
-     //  Due calculation
-    const due = truckPayment - advancePayment;
+    const profit = totalAmount - Number(truckPayment) - Number(dailyExpense);
+    //  Due calculation
+    const due = Number(truckPayment) - Number(advancePayment);
+
+    
+    
+    
+     
 
     const trip = await Trip.create({
       date,
@@ -63,7 +95,6 @@ export const createTrip = async (req, res) => {
       partiesCount, 
       parties,
       tonMaterial,
-      rate,
       totalAmount,
       truckPayment,
       advancePayment,

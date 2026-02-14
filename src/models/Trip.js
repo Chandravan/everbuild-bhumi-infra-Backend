@@ -25,17 +25,17 @@ const tripSchema = new mongoose.Schema({
   parties: [
     {
       partyNo: Number,
-      material: Number
+      material: Number,
+      destination: String,
+
     }
   ],
   tonMaterial: {
     type: Number,
-    required: [true, "Material weight is required"]
+    required: [true, "Material weight is required"],
+    set: v => Math.round(v * 1000) / 1000
   },
-  rate: {
-    type: Number, 
-    required: [true, "City rate is required"]
-  },
+  
   totalAmount: {
     type: Number,
     required: [true, "Total amount is required"]
@@ -75,7 +75,7 @@ const tripSchema = new mongoose.Schema({
   paymentBy: {
     type: String,
     required: [true, "Please specify who made the payment"],
-    enum: [ "Partner 2", "Rohit"] 
+    enum: [ "Raj Gautam", "Rohit"] 
   }
 }, {
   timestamps: true // createdAt aur updatedAt automatically manage honge

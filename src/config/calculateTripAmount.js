@@ -1,6 +1,6 @@
 import Route from "../models/Route.js";
 
-const RATE_PER_TON = 1;
+const RATE_PER_KG = 1;
 
 export const calculateTripAmount = async (tonMaterial, destination) => {
   if (!tonMaterial || tonMaterial <= 0) {
@@ -19,6 +19,6 @@ export const calculateTripAmount = async (tonMaterial, destination) => {
     throw new Error(`Rate not found for destination: ${toCity}`);
   }
 
-  const baseAmount = tonMaterial * RATE_PER_TON;
+  const baseAmount = tonMaterial * RATE_PER_KG;
   return Math.round(baseAmount * route.rate);
 };

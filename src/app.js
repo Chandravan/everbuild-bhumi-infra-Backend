@@ -7,6 +7,7 @@ import authMiddleware from "./middleware/authMiddleware.js";
 import cors from "cors"
 import { loadDestinationRatesToDB } from "./config/loadRatesFromExcel.js";
 import authRoutes from "./routes/authRoutes.js"
+import dueRoutes from "./routes/dueRoutes.js"
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/api/trucks",authMiddleware, truckRoutes );
 app.use("/api/drivers",authMiddleware, driverRoutes);
 app.use("/api/trips",authMiddleware, tripRoutes);
 app.use("/api/location",authMiddleware, router);
+app.use("/api/due", dueRoutes);
 
 app.post("/api/sync-rates", async (req, res) => {
   await loadDestinationRatesToDB();
