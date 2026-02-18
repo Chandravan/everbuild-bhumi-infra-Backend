@@ -27,6 +27,19 @@ const tripSchema = new mongoose.Schema({
       partyNo: Number,
       material: Number,
       destination: String,
+      invoices: {
+        type: [String], // Array of invoice numbers
+        default: []
+      },
+      status: {
+        type: String,
+        enum: ["Pending", "Received"],
+        default: "Pending"
+      },
+      podUrl: {
+        type: String, // Yahan image ka URL ya path store hoga
+        default: ""
+      }
 
     }
   ],

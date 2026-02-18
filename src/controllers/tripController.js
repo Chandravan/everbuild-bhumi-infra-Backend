@@ -30,6 +30,34 @@ export const getTripById = async (req, res) => {
   }
 };
 
+
+export const updatePartyDetails = async (req, res) => {
+  try {
+    const { id, partyId } = req.params; 
+    const updates = req.body; 
+
+    
+    const updateQuery = {};
+    for (let key in updates) {
+      updateQuery[`parties.$.${key}`] = updates[key];
+    }
+
+    const updatedTrip = await Trip.findOneAndUpdate(
+      { _id: id, "parties._id": partyId }, // Filter
+      { $set: updateQuery },               // Update
+      { new: true, runValidators: true }   // Options
+    );
+
+    if (!updatedTrip) {
+      return res.status(404).json({ message: "Trip or Party not found" });
+    }
+
+    res.status(200).json(updatedTrip);
+  } catch (error) {
+    res.status(400).json({ message: "Party update failed", error: error.message });
+  }
+};
+
 // Create New Trip
 
 export const createTrip = async (req, res) => {

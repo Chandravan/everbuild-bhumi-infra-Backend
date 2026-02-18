@@ -6,6 +6,7 @@ import {
   updateTrip, 
   deleteTrip, 
   getTripStats ,
+  updatePartyDetails,
   
 } from "../controllers/tripController.js";
 import { getTotalProfit } from "../controllers/getTotalProfit.js";
@@ -20,6 +21,8 @@ router.get("/total-profit", getTotalProfit);
 router.get("/total-by-partner",getTotalByPartner ),
 router.get("/total-due", getTotalDue) 
 router.get("/:id", getTripById);
+// routes/tripRoutes.js
+router.patch("/:id/party/:partyId", updatePartyDetails);
 router.post("/create", createTrip);
 router.put("/:id", updateTrip);
 router.delete("/:id", deleteTrip);
